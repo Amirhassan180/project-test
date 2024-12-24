@@ -1,0 +1,602 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title>ارگانیک</title>
+
+    <link rel="icon" href="assets/img/favicon.png"/>
+
+    <link rel="stylesheet" href="{% static 'assets/css/flaticon.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}"/>
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/css/nice-select.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/css/jquery-ui.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/css/venobox.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/css/slick.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}"/>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<div class="preloader" id="preloader">
+    <div class="loader"></div>
+</div>
+
+
+<div class="header-top">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-12 col-lg-5">
+                <div class="header-top-welcome"><p>برای اولین خرید خود 10٪ تخفیف بگیرید!</p></div>
+            </div>
+
+            <div class="col-md-7 col-lg-4">
+
+                <ul class="header-top-list">
+                    <li><a href="contact.html">با ما تماس بگیرید</a></li>
+                    <li><a href="offer.html">تخفیف</a></li>
+                    <li><a href="faq.html">کمک خواستن؟</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-5 col-lg-3">
+
+                <div class="header-top-select">
+
+                    <div class="header-select justify-content-lg-end">
+
+                        <i class="fal fa-sack-dollar"></i>
+
+                        <select class="select">
+                            <option value="dollar" selected="">تومان</option>
+                            <option value="gbp">دلار</option>
+                        </select>
+                    </div>
+
+                    <div class="header-select justify-content-lg-end">
+                        <i class="fal fa-globe-europe"></i>
+                        <select class="select">
+                            <option value="english" selected="">انگلیسی</option>
+                            <option value="germany">آلمان</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="header-part">
+    <div class="container">
+        <div class="header-content-group">
+
+            <div class="header-widget-group left">
+
+                <button class="header-widget header-user" title="حساب من">
+                    <img src="{% static 'assets/img/user.jpg' %}" alt="کاربر">
+                    {% if user.is_authenticated %}
+                        {{ user.username }}
+                    {% endif %}
+                </button>
+
+                <a class="header-logo" href="{% url 'home' %}">
+                    <img src="{% static 'assets/img/logo.png' %}" alt="لوگو">
+                </a>
+
+                <button class="header-widget header-src" title="نوار جستجو">
+                    <i class="far fa-search"></i>
+                </button>
+
+                <button class="header-widget header-cate" title="لیست دسته بندی">
+                    <i class="flaticon-menu-1"></i>
+                </button>
+            </div>
+
+            <form class="header-form" action="{% url 'search' %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="مورد خود را در اینجا جستجو کنید ..." name="searched">
+                <button type="submit"><i class="far fa-search"></i></button>
+            </form>
+
+            <div class="header-widget-group right">
+                {% if user.is_authenticated %}
+                    <!-- User Dropdown -->
+                    <li class="nav-item dropdown header-widget">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownUser" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+
+                            <li>
+                                <a class="dropdown-item" href="{% url 'update_user' %}">پروفایل من</a>
+                                <a class="dropdown-item" href="{% url 'update_info' %}">اطلاعات کاربری</a>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="{% url 'logout' %}">خروج</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <a class="nav-link header-widget" href="{% url 'login' %}">ورود</a>
+                {% endif %}
+
+                {% if user.is_superuser %}
+                    <li class="nav-item dropdown header-widget">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownUser" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            سفارشات
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+
+                            <li>
+                                <a class="dropdown-item" href="{% url 'shipped_dash' %}">ارسال شده</a>
+                                <a class="dropdown-item" href="{% url 'not_shipped_dash' %}">ارسال نشده</a>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+
+                        </ul>
+                    </li>
+                {% endif %}
+
+
+                <!-- Compare List -->
+                <a class="header-widget" href="compare.html" title="مقایسه لیست">
+                    <i class="far fa-exchange"></i><sup>2</sup>
+                </a>
+
+                <!-- Wishlist -->
+                <a class="header-widget" href="wishlist.html" title="لیست علاقه مندیها">
+                    <i class="far fa-heart"></i><sup>3</sup>
+                </a>
+
+                <!-- Cart -->
+                <a href="{% url 'cart_summary' %}" class="header-widget header-cart" title="سبد خرید">
+                    <i class="far fa-shopping-cart"></i>
+                    <sup>{{ cart|length }}</sup>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<nav class="navbar-part">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-12">
+
+                <div class="navbar-content">
+
+                    <ul class="navbar-list">
+
+                        <li class="navbar-item dropdown-megamenu">
+                            <a class="navbar-link dropdown-arrow">دسته بندی</a>
+                            <div class="megamenu">
+                                <div class="container">
+                                    <div class="row row-cols-5">
+
+                                        <div class="col">
+
+                                            <div class="megamenu-wrap">
+                                                <h3 class="megamenu-title">
+                                                    <a href="{% url 'category_summary' %}" style="color: black;">
+                                                        تمامی محصولات
+                                                    </a>
+                                                </h3>
+                                            </div>
+
+                                            <div class="megamenu-wrap">
+
+                                                <h5 class="megamenu-title">
+                                                    <a href="{% url 'category' 'سبزیجات-تازه' %}" style="color: black;">
+                                                        سبزیجات تازه
+                                                    </a>
+                                                </h5>
+
+                                                <ul class="megamenu-list">
+                                                    <li>
+                                                        <a href="{% url 'product_by_brand' 'بروک' %}">کلم بروکلی</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="navbar-item dropdown">
+                            <a class="navbar-link dropdown-arrow">صفحات</a>
+                            <ul class="dropdown-position-list">
+                                <li><a href="about.html">درباره ما</a></li>
+                                <li><a href="contact.html">با ما تماس بگیرید</a></li>
+                                <li><a href="offer.html">تخفیف</a></li>
+                                <li><a href="faq.html">سوالات متداول</a></li>
+                                <li><a href="compare.html">مقایسه کنید</a></li>
+                                <li><a href="privacy.html">حریم خصوصی</a></li>
+                                <li><a href="coming-soon.html">به زودی</a></li>
+                                <li><a href="blank-page.html">صفحه خالی</a></li>
+                                <li><a href="error.html">خطای 404</a></li>
+                                <li><a href="wishlist.html">لیست علاقه مندیها</a></li>
+                                <li><a href="{% url 'checkout' %}">پرداخت</a></li>
+                                <li><a href="{% url 'cart_summary' %}">سبد خرید</a></li>
+                                <li><a href="orderlist.html">لیست سفارش</a></li>
+                                <li><a href="order-detail.html">جزئیات سفارش</a></li>
+                                <li><a href="invoice.html">فاکتور سفارش</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="navbar-info-group">
+
+                        <div class="navbar-info justify-content-end">
+
+                            <i class="fal fa-phone"></i>
+
+                            <p>
+                                <small>شماره تماس:</small>
+                                <a href="tel:021444676">021444676</a>
+                            </p>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<aside class="category-part">
+    <div class="category-container">
+        <div class="category-header">
+            <a href="{% url 'home' %}"><img src="{% static 'assets/img/logo.png' %}" alt="لوگو"></a>
+            <button class="category-close"><i class="far fa-times"></i></button>
+        </div>
+
+        <ul class="category-list">
+
+            <li>
+
+                <a class="cate-link dropdown-link">
+                    <i class="flaticon-vegetable"></i> سبزیجات تازه
+                </a>
+
+                <ul class="dropdown-list">
+                    <li>
+                        <a href="{% url 'product_by_brand' 'بروک' %}">کلم بروکلی</a>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+
+        <div class="category-footer">
+            <p>کلیه حقوق محفوظ است توسط <a href="{% url 'home' %}">ارگانیک</a></p>
+        </div>
+    </div>
+</aside>
+
+
+<aside class="mobile-nav">
+    <div class="nav-container">
+
+        <div class="nav-header">
+            <a href="{% url 'home' %}"><img src="{% static 'assets/img/logo.png' %}" alt="لوگو"></a>
+            <button class="nav-close"><i class="fal fa-times"></i></button>
+        </div>
+
+        <div class="nav-content">
+
+            {% if user.is_authenticated %}
+                <div class="nav-profile">
+                    <a class="nav-user"><img src="{% static 'assets/img/user.jpg' %}" alt="کاربر"></a>
+                    <h4 class="nav-name">{{ user.username }}</h4>
+                </div>
+
+                <ul class="nav-list">
+                    <li>
+                        <a class="nav-link dropdown-link">حساب</a>
+                        <ul class="dropdown-list">
+                            <li>
+                                <a href="{% url 'update_info' %}">پروفایل من</a>
+                                <a href="{% url 'update_user' %}">اطلاعت کاربری</a>
+                                <a href="{% url 'logout' %}">خروج</a>
+                            </li>
+
+                        </ul>
+
+                        {% if user.is_superuser %}
+                            <a class="nav-link dropdown-link">سفارشات</a>
+                            <ul class="dropdown-list">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'shipped_dash' %}">ارسال شده</a>
+                                    <a class="dropdown-item" href="{% url 'not_shipped_dash' %}">ارسال نشده</a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </li>
+                </ul>
+            {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">ورود</a></li>
+            {% endif %}
+
+            <ul class="nav-list">
+
+                <li>
+                    <a class="nav-link dropdown-link">خانه</a>
+                    <ul class="dropdown-list">
+                        <li><a href="{% url 'home' %}">صفحه اصلی</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="nav-link dropdown-link">خرید</a>
+                    <ul class="dropdown-list">
+                        <li><a href="{% url 'cart_summary' %}">سبد خرید</a></li>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="nav-link" href="contact.html">با ما تماس بگیرید</a>
+                </li>
+            </ul>
+
+            <div class="nav-info-group">
+                <div class="nav-info">
+                    <i class="icofont-ui-touch-phone"></i>
+                    <p>
+                        <small>شماره تماس:</small>
+                        <a href="tel:021444676">021444676</a>
+                    </p>
+                </div>
+                <div class="nav-info">
+                    <i class="icofont-ui-email"></i>
+
+                    <p>
+                        <small>برای ما ایمیل بزنید </small>
+                        <span>
+                            <a href="mailto:info@gmail.com" class="__cf_email__"
+                               data-cfemail="9af3f4fcf5daffe2fbf7eaf6ffb4f9f5f7">info@gmail.com
+                            </a>
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="nav-footer">
+                <p>کلیه حقوق محفوظ است توسط <a href="{% url 'home' %}">ارگانیک</a></p>
+            </div>
+        </div>
+    </div>
+</aside>
+
+
+<div class="mobile-menu">
+    <a href="{% url 'home' %}" title="صفحه نخست">
+        <i class="far fa-home"></i><span>خانه</span>
+    </a>
+
+    <button class="cate-btn" title="لیست دسته بندی">
+        <i class="far fa-th-large"></i><span>دسته بندی</span>
+    </button>
+
+    <!-- فرم جستجو -->
+    <form class="header-form" method="post" action="{% url 'search' %}">
+        {% csrf_token %}
+        <input type="text" placeholder="مورد خود را در اینجا جستجو کنید ..." name="searched">
+        <button type="submit"><i class="far fa-search"></i></button>
+    </form>
+
+    <a class="header-widget ms-3" href="{% url 'cart_summary' %}" title="سبد خرید">
+        <i class="far fa-shopping-cart"></i><sup>{{ cart|length }}</sup>
+    </a>
+
+    <a href="wishlist.html" title="لیست علاقه مندیها">
+        <i class="far fa-heart"></i><span>لیست آرزوها </span><sup>3</sup>
+    </a>
+
+    <a href="compare.html" title="مقایسه لیست">
+        <i class="far fa-exchange"></i><span>مقایسه کنید </span><sup>2</sup>
+    </a>
+</div>
+
+
+
+{% for message in messages %}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>توجه کنید: </strong> {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+
+
+{% block body_page %}{% endblock %}
+
+
+<section class="news-part">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-5 col-lg-6 col-xl-7">
+                <div class="news-text">
+                    <h2>برای به روزرسانی خبرنامه ما مشترک شوید</h2>
+                    <p>تنوع زیادی از معابر سنگ معدن سنگ معدن موجود است</p>
+                </div>
+            </div>
+
+            <div class="col-md-7 col-lg-6 col-xl-5">
+
+                <form class="news-form">
+
+                    <input type="text" placeholder="آدرس ایمیل خود را وارد کنید">
+
+                    <button>
+                        <span>  اشتراک <i class="far fa-paper-plane"></i> </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer class="footer-part">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-6 col-xl-3">
+                <div class="footer-widget">
+                    <a class="footer-logo" href="{% url 'home' %}"><img src="{% static 'assets/img/logo.png' %}"
+                                                                        alt="لوگو"></a>
+                    <p class="footer-desc">ما بسیاری از معابر موجود هستیم اما اکثریت از طنز تزریق شده یا تصادفی
+                        باورنکردنی دچار تغییراتی شده اند.</p>
+                    <ul class="footer-social">
+                        <li><a class="fab fa-facebook-f" href="#"></a></li>
+                        <li><a class="fab fa-twitter" href="#"></a></li>
+                        <li><a class="fab fa-linkedin-in" href="#"></a></li>
+                        <li><a class="fab fa-instagram" href="#"></a></li>
+                        <li><a class="fab fa-pinterest" href="#"></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xl-3">
+                <div class="footer-widget">
+                    <h3 class="footer-title">لینک های سریع</h3>
+                    <div class="footer-links">
+
+                        <ul>
+                            <li><a href="#">درباره ما</a></li>
+                            <li><a href="#">شرکت های وابسته</a></li>
+                            <li><a href="#">با ما تماس بگیرید</a></li>
+                            <li><a href="#">حرفه ما</a></li>
+                            <li><a href="#">حریم خصوصی</a></li>
+                            <li><a href="#">پرسش و پاسخ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xl-3">
+
+                <div class="footer-widget contact">
+
+                    <h3 class="footer-title">با ما تماس بگیرید</h3>
+
+                    <ul class="footer-contact">
+
+                        <li>
+                            <i class="fal fa-envelope-open-text"></i>
+                            <p>
+                                <span>ایمیل‌های تماس:</span>
+                                <span>
+                                    <a href="mailto:info@gmail.com">info@gmail.com</a>
+                                </span>
+                            </p>
+                        </li>
+
+                        <li>
+                            <i class="fal fa-phone"></i>
+                            <p>
+                                <small>شماره تماس:</small>
+                                <a href="tel:021444676">021444676</a>
+                            </p>
+                        </li>
+
+                        <li>
+                            <i class="fal fa-map-marker-alt"></i>
+                            <p>ایران - تهران - خیابان بهار</p>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xl-3">
+                <div class="footer-widget">
+                    <h3 class="footer-title">بارگیری برنامه</h3>
+                    <p class="footer-desc">بارگیری برنامه از مدت ها قبل ثابت کرده است که خواننده هنگام مطالعه در صفحه ای
+                        که دارای چیدمان صفحه است دارای حروف طبیعی است و حواس او به مطالعه خوانده می شود.</p>
+                    <div class="footer-app">
+                        <a href="#"><img src="{% static 'assets/img/download/play-store.png' %}" alt="گوگل"></a>
+                        <a href="#"><img src="{% static 'assets/img/download/app-store.png' %}" alt="برنامه"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="footer-bottom justify-content-center">
+                    <h2 class="footer-copytext" style="font-size: 1.2rem;">© کپی رایت 1400 <a href="{% url 'home' %}">ارگانیک</a>
+                        کلیه حقوق محفوظ است.</h2>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</footer>
+
+
+<a href="#" class="back-to-top"><i class="far fa-long-arrow-up"></i></a>
+
+<script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/nice-select.min.js' %}"></script>
+<script src="{% static 'assets/js/venobox.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery-ui.js' %}"></script>
+<script src="{% static 'assets/js/finalcountdown.min.js' %}"></script>
+<script src="{% static 'assets/js/slick.min.js' %}"></script>
+<script src="{% static 'assets/js/nice-select.js' %}"></script>
+<script src="{% static 'assets/js/price-range.js' %}"></script>
+<script src="{% static 'assets/js/accordion.js' %}"></script>
+<script src="{% static 'assets/js/venobox.js' %}"></script>
+<script src="{% static 'assets/js/slick.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+{% block script %}
+
+{% endblock %}
+
+
+</body>
+</html>

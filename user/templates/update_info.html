@@ -1,0 +1,55 @@
+{% extends '_layout_shop.html' %}
+{% load static %}
+
+{% block body_page %}
+    <section class="inner-section profile-part mt-5">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-lg-8">
+                    <div class="account-card">
+
+                        <div class="account-title text-center mb-4">
+                            <h4>مشخصات شما</h4>
+                        </div>
+
+                        <div class="account-content">
+                            <div class="row align-items-center">
+
+                                <div class="col-lg-3 text-center mb-3">
+                                    <div class="profile-image">
+                                        <a href="#">
+                                            <img src="{% static 'assets/img/user.jpg' %}" alt="کاربر"
+                                                 class="img-fluid rounded-circle">
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <form method="post" action="{% url 'update_info' %}">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <br>
+                                    <hr>
+                                    <div class="account-title text-center mb-4">
+                                        <h4>نشانی تحویل</h4>
+                                    </div>
+
+                                    {{ shipping_form }}
+                                    <div class="form-group mt-3 d-flex justify-content-between">
+                                        <button type="submit" class="btn btn-primary">ذخیره کردن</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block script %}{% endblock %}

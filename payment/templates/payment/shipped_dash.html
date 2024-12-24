@@ -1,0 +1,76 @@
+{% extends '_layout_shop.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block body_page %}
+    <section class="inner-section single-banner">
+        <div class="container">
+
+            <h2> لیست سفارشات ارسال شده</h2>
+
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item active" aria-current="page">لیست سفارشات ارسال شده</li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="inner-section orderlist-part">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="orderlist">
+                        <div class="orderlist-body" style="">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-scroll p-0">
+                                        <table class="table table-list table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">شماره سفارش</th>
+                                                <th scope="col">نام و نام خانوادگی</th>
+                                                <th scope="col">ایمیل</th>
+                                                <th scope="col">تاریخ ارسال</th>
+                                                <th scope="col">مبلغ واریز شده</th>
+                                                <th scope="col">عمل</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for item in orders %}
+                                                <tr>
+                                                    <td class="table-name"><h6>{{ item.id }}</h6></td>
+                                                    <td class="table-name"><h6>{{ item.full_name }}</h6></td>
+                                                    <td class="table-name"><h6>{{ item.email }}</h6></td>
+                                                    <td class="table-name"><h6>{{ item.date_shipped }}</h6></td>
+                                                    <td class="table-name"><h6>{{ item.amount_paid|intcomma }}</h6></td>
+                                                    <td class="table-action">
+                                                        <a class="view" href="{% url 'order_detail' item.id %}"
+                                                           title="جزئیات سفارش"><i
+                                                                class="far fa-eye"></i>
+                                                        </a>
+
+                                                         <form method="post" class="d-inline">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="shipping_status" value="true">
+                                                            <input type="hidden" name="num" value="{{ item.id }}">
+
+                                                            <button type="submit"  class="btn btn-danger btn-sm"> لغو ارسال
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block script %}{% endblock %}

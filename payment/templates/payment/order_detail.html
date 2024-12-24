@@ -1,0 +1,125 @@
+{% extends '_layout_shop.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block body_page %}
+    <section class="inner-section single-banner">
+        <div class="container">
+
+            <h2>جزئیات سفارش</h2>
+
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item active" aria-current="page">جزئیات سفارش</li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="inner-section orderlist-part">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="orderlist">
+                        <div class="orderlist-body" style="">
+                            <div class="row">
+
+                                <div class="col-lg-12">
+                                    <div class="order-track">
+                                        <ul class="order-track-list">
+                                            {% if not order.shipped %}
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="shipping_status" value="true">
+                                                    <button type="submit" class="btn btn-success">ارسال بشه</button>
+                                                </form>
+
+                                            {% else %}
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="shipping_status" value="false">
+                                                    <button type="submit" class="btn btn-danger">ارسال نشه</button>
+                                                </form>
+
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-5">
+                                    <ul class="orderlist-details">
+                                        <li>
+                                            <h6>شماره سفارش</h6>
+                                            <p>{{ order.id }}</p>
+                                        </li>
+
+                                        <li>
+                                            {% if order.date_shipped %}
+                                                 <h6>تاریخ ارسال</h6>
+                                                 <p>{{ order.date_shipped }}</p>
+
+                                            {% else %}
+                                                <h6>تاریخ سفارش</h6>
+                                                <p>{{ order.date_ordered }}</p>
+                                            {% endif %}
+                                        </li>
+
+                                        <li>
+                                            <h6>نام گیرنده</h6>
+                                            <p>{{ order.full_name }}</p>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <ul class="orderlist-details">
+                                        <li>
+                                            <h6>جمع</h6>
+                                            <p>{{ order.amount_paid|intcomma }}تومان</p>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <div class="orderlist-deliver">
+                                        <h6>نشانی تحویل</h6>
+                                        <p>{{ order.shipping_address }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="table-scroll p-0">
+                                        <table class="table table-list table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">نام محصول</th>
+                                                <th scope="col">قیمت</th>
+                                                <th scope="col">تعداد</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            {% for order_item in order_items %}
+                                                <tr>
+                                                    <td class="table-name"><h6>{{ order_item.product }}</h6></td>
+                                                    <td class="table-price">
+                                                        <h6>{{ order_item.price }}</h6>
+                                                    </td>
+                                                    <td class="table-quantity"><h6>{{ order_item.quantity }}</h6></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block script %}{% endblock %}

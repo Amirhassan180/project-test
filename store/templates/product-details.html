@@ -1,0 +1,306 @@
+{% extends '_layout_shop.html' %}
+{% load static %}
+
+{% block body_page %}
+
+    <section class="inner-section single-banner">
+        <div class="container">
+
+            <h2>جزئیات محصول</h2>
+
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item active" aria-current="page">جزئیات محصول</li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="inner-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+
+                    <!-- Product Image -->
+                    <div class="details-gallery">
+
+                        {% if products.is_sale %}
+                            <div class="details-label-group"><label class="label-text sale">تخفیف</label></div>
+                        {% endif %}
+
+                        <!-- نمایش پیش‌نمایش تصاویر -->
+                        <ul class="details-preview">
+                            {% for image in images %}
+                                <li><img src="{{ image.image.url }}" alt="تولید - محصول"></li>
+                            {% empty %}
+                                <li><p>تصویری برای این محصول وجود ندارد.</p></li>
+                            {% endfor %}
+                        </ul>
+
+                        <!-- نمایش تصاویر کوچک (thumbs) -->
+                        <ul class="details-thumb">
+                            {% for image in images %}
+                                <li><img src="{{ image.image.url }}" alt="تولید - محصول"></li>
+                            {% empty %}
+                                <li><p>تصویری برای این محصول وجود ندارد.</p></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="col-lg-7">
+                    <div class="details-content">
+
+                        <!-- Product Name -->
+                        <h3 class="details-name"><a href="#">{{ products.name }}</a></h3>
+
+                        <!-- Product reviews-->
+                        <div class="d-flex justify-content-start small text-success mb-2">
+                            {% for _ in ""|center:products.star %}
+                                <div class="bi-star-fill"></div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Product Price -->
+                        {% if products.is_sale %}
+
+                            <h3 class="details-price">
+                                <del> {{ products.price }} تومان</del>
+                                <span> {{ products.sale_price }}تومان  </span>
+                            </h3>
+                        {% else %}
+
+                            <h3 class="details-price">
+                                <span> {{ products.price }}تومان  </span>
+                            </h3>
+                        {% endif %}
+
+
+                        <!-- Product Description -->
+                        <p class="details-desc">{{ products.description }}</p>
+
+                        <!-- Product warehouse -->
+                        <div class="details-list-group">
+                            <label class="details-list-title">در انبار:</label>
+                            <div>{{ products.warehouse }}</div>
+                        </div>
+
+                        <div class="cart-action-group">
+
+                            <div class="product-action">
+
+                                <button class="action-minus" title="مقدار منهای">
+                                    <i class="far fa-minus"></i>
+                                </button>
+
+                                <input class="action-input" title="تعداد" type="text" id="cart_quantity"
+                                value="1">
+
+                                <button class="action-plus" title="مقدار به علاوه">
+                                    <i class="far fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="details-add-group">
+
+                            <button class="product-add w-100" id="btn-addCart"
+                                    title="افزودن به سبد خرید" value="{{ products.id }}">
+                                <i class="far fa-shopping-cart"></i>
+                                <span>افزودن به سبد خرید</span>
+                            </button>
+                        </div>
+
+                        <div class="details-action-group">
+
+                            <a class="view-wish wish" href="#" title="لیست علاقه مندی های خود را اضافه کنید">
+                                <i class="far fa-heart"></i>
+                                <span>به آرزو اضافه کردن</span>
+                            </a>
+
+                            <a class="view-compare" href="compare.html" title="مقایسه این مورد">
+                                <i class="far fa-exchange"></i>
+                                <span>افزودن برای مقایسه</span></a>
+                        </div>
+
+                        <div class="details-list-group mt-4">
+
+                            <label class="details-list-title">اشتراک گذاری:</label>
+
+                            <ul class="details-share-list">
+                                <li>
+                                    <a href="#" class="fab fa-instagram" title="اینستاگرام"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="inner-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav nav-tabs">
+
+                        <li>
+                            <a href="#tab-desc" class="tab-link active" data-bs-toggle="tab">توصیفات</a>
+                        </li>
+
+                        <li>
+                            <a href="#tab-reve" class="tab-link" data-bs-toggle="tab">نظرات (05)</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-pane active" id="tab-desc">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="product-details-frame product-details">
+
+                            <div class="tab-descrip">
+
+                                <p>{{ products.description_all }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="product-details-frame">
+                            <div class="tab-descrip">
+
+                                <img src="{% static 'assets/img/video.jpg' %}" alt="ویدئو">
+
+                                <a title="فیلم محصول"
+                                   href="{{ products.video_url }}"
+                                   class="venobox far fa-play"
+                                   data-autoplay="true"
+                                   data-vbtype="video">
+
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="tab-reve">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div class="product-details-frame">
+
+                            <ul class="review-list">
+
+                                <!-- نظرات کاربر احراز هویت شده برای محصول -->
+                                <li class="review-item">
+
+                                    <div class="review-media">
+                                        <a class="review-avatar" href="#"><img
+                                                src="{% static 'assets/img/avatar/com.jpg' %}" alt="مرور"></a>
+                                        <h5 class="review-meta"><a href="#">نیلوفر </a><span>24 خرداد 1400</span></h5>
+                                    </div>
+
+                                    <ul class="review-rating">
+                                        <li class="fas fa-star"></li>
+                                        <li class="fas fa-star"></li>
+                                        <li class="fas fa-star"></li>
+                                        <li class="fas fa-star"></li>
+                                        <li class="far fa-star"></li>
+                                    </ul>
+
+                                    <p class="review-desc">
+                                        این یک واقعیت ثابت شده طولانی است که خواننده هنگام مشاهده صفحه آن ، از محتوای
+                                        قابل خواندن صفحه منحرف می شود. نکته استفاده از متن ساختگی این است که توزیع حروف
+                                        کم و بیش عادی دارد ، در مقابل استفاده از "محتوا در اینجا ، محتوای اینجا" ، باعث
+                                        می شود انگلیسی شبیه به نظر برسد.
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- شخصی سازی کابر احراز هویت شده  -->
+                        <div class="product-details-frame p-5">
+
+                            <h3 class="frame-title">بررسی خود را اضافه کنید</h3>
+
+                            <form class="review-form">
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="star-rating">
+                                            <input type="radio" name="rating" id="star-1"><label
+                                                for="star-1"></label><input type="radio" name="rating"
+                                                                            id="star-2"><label for="star-2"></label>
+                                            <input type="radio" name="rating" id="star-3"><label
+                                                for="star-3"></label><input type="radio" name="rating"
+                                                                            id="star-4"><label for="star-4"></label>
+                                            <input type="radio" name="rating" id="star-5"><label for="star-5"></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+
+                                            <input type="text" class="form-control" placeholder="نام">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control" placeholder="پست الکترونیک">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <textarea class="form-control" placeholder="بررسی شما"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <button class="btn btn-inline">
+                                            <i class="far fa-paper-plane"></i>
+                                            <span>بررسی خود را بگذارید</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).on('click', '#btn-addCart', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'cart_add' %}',
+                data: {
+                    product_id: $(this).val(),
+                    product_qty: $('#cart_quantity').val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    action: 'post',
+                },
+                success: function (json) {
+                    location.reload()
+                },
+                error: function (xhr, errmsg, err) {
+                    console.error(`Error: ${errmsg}`);
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
+

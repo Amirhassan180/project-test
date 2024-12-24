@@ -1,0 +1,140 @@
+{% extends '_layout_shop.html' %}
+{{% load humanize %}
+{% load static %}
+
+{% block body_page %}
+
+
+    <section class="section recent-part mt-4">
+
+        <div class="container">
+
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+
+                {% for item in searched %}
+
+                    {% if item.is_sale %}
+
+                        <div class="col">
+                            <div class="product-card">
+                                <div class="product-media">
+
+                                    <div
+                                            class="product-label"><label class="label-text sale">تخفیف</label>
+                                    </div>
+
+                                    <button class="product-wish wish"><i class="far fa-heart"></i></button>
+
+                                    <a class="product-image" href="{% url 'product-details' item.id %}"><img
+                                            src="{{ item.image.url }}"
+                                            alt="{{ item.name }}">
+                                    </a>
+
+                                    <div class="product-widget">
+
+                                        <a title="فیلم محصول"
+                                           href="{{ item.video_url }}"
+                                           class="venobox far fa-play" data-autoplay="true"
+                                           data-vbtype="video">
+
+                                        </a>
+
+                                        <a title="مقایسه محصول" href="compare.html"
+                                           class="far fa-exchange">
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="product-content">
+
+                                    <h6 class="product-name">
+                                        <a href="{% url 'product-details' item.id %}">{{ item.name }}</a><br>
+                                        <a href="{% url 'product-details' item.id %}"> دسته بندی : {{ item.category }}</a>
+                                    </h6>
+
+                                    <!-- Product reviews-->
+                                    <div class="d-flex justify-content-start small text-success mb-2">
+                                        {% for _ in ""|center:item.star %}
+                                            <div class="bi-star-fill"></div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="product-price">
+                                        <div>
+                                            <del>{{ item.price|intcomma }} تومان</del>
+                                            <span>{{ item.sale_price|intcomma }} تومان  </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        <div class="col">
+                            <div class="product-card">
+                                <div class="product-media">
+
+                                    <button class="product-wish wish"><i class="far fa-heart"></i></button>
+
+                                    <a class="product-image" href="{% url 'product-details' item.id %}"><img
+                                            src="{{ item.image.url }}"
+                                            alt="{{ item.name }}">
+                                    </a>
+
+                                    <div class="product-widget">
+
+                                        <a title="فیلم محصول"
+                                           href="{{ item.video_url }}"
+                                           class="venobox far fa-play" data-autoplay="true"
+                                           data-vbtype="video">
+
+                                        </a>
+
+                                        <a title="مقایسه محصول" href="compare.html"
+                                           class="far fa-exchange">
+
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <div class="product-content">
+
+                                    <!-- Product name-->
+                                    <h6 class="product-name">
+                                        <a href="{% url 'product-details' item.id %}">{{ item.name }}</a><br>
+                                        <a href="{% url 'product-details' item.id %}"> دسته بندی : {{ item.category }}</a>
+                                    </h6>
+
+                                    <!-- Product reviews-->
+                                    <div class="d-flex justify-content-start small text-success mb-2">
+                                        {% for _ in ""|center:item.star %}
+                                            <div class="bi-star-fill"></div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <!-- Product price-->
+                                    <div class="product-price">
+                                        <div>
+                                            <span>{{ item.price|intcomma }} تومان  </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </section>
+
+{% endblock %}
+
+{% block script %}{% endblock %}

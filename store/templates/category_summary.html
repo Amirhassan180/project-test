@@ -1,0 +1,55 @@
+{% extends '_layout_shop.html' %}
+{% load static %}
+
+{% block body_page %}
+
+    <section class="news-part">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h2 style="color: #ffffff">تمامی دسته بندی محصولات</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section recent-part mt-5">
+
+        <div class="container">
+
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+
+                {% for item in categories %}
+
+                    <div class="col">
+                        <div class="product-card">
+                            <div class="product-media">
+
+                                <a class="product-image" href="{% url 'category' item.name %}">
+                                    <img src="#">
+                                </a>
+
+                            </div>
+
+                            <div class="product-content">
+
+                                <!-- Product name-->
+                                <h6 class="product-name">
+
+                                    <a href="{% url 'category' item.name %}">
+                                        <h3>{{ item.name }}</h3>
+                                    </a>
+                                </h6>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block script %}{% endblock %}

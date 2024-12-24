@@ -1,0 +1,114 @@
+{% extends '_layout_shop.html' %}
+{{% load humanize %}
+{% load static %}
+
+{% block body_page %}
+
+    <section class="inner-section single-banner">
+        <div class="container">
+            <h2>پرداخت</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item active" aria-current="page">پرداخت</li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="inner-section checkout-part">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-8">
+
+                    <div class="account-card">
+
+                        <div class="account-title">
+                            <h4>نشانی تحویل</h4>
+                        </div>
+
+                        {{ shipping_form.as_p }}
+
+                        <div class="mt-3 mx-auto text-start">
+                            <a href="{% url 'checkout' %}" class="btn btn-secondary">ویرایش</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="account-card">
+                        <div class="checkout-charge">
+                            <div class="account-title"><h4> لیست سفارشات</h4></div>
+                            <ul>
+                                {% for product in cart_products %}
+
+                                    {% if product.is_sale %}
+                                        <li>
+                                            <span>{{ product.name }}</span>
+                                            <span>قیمت: {{ product.sale_price|intcomma }} تومان </span>
+                                            <span>تعداد:
+                                                {% for key,value in quantities.items %}
+                                                    {% if key == product.id|slugify %}
+                                                        {{ value }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </span>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <span>{{ product.name }} </span>
+                                            <span>قیمت: {{ product.price|intcomma }} تومان </span>
+                                            <span>تعداد:
+                                                {% for key,value in quantities.items %}
+                                                    {% if key == product.id|slugify %}
+                                                        {{ value }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </span>
+                                        </li>
+                                    {% endif %}
+
+                                {% endfor %}
+                                <li><span>جمع محصولات </span><span>{{ totals|intcomma }}</span></li>
+
+                            </ul>
+                        </div>
+                        <div class="checkout-proced">
+                            <a href="{% url 'cart_summary' %}" class="btn btn-inline">ویرایش کردن</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+
+                    <div class="account-card">
+
+                        <div class="account-title">
+                            <h4>اطلاعات کارت</h4>
+                        </div>
+
+                        <form action="{% url 'process_order' %}" method="post">
+                            {% csrf_token %}
+                            {% for item in billing_form %}
+                                {{ item.label_tag }}
+                                {{ item }}
+                            {% endfor %}
+
+                            <div class="mt-3 mx-auto text-start">
+                                <button type="submit" class="btn btn-secondary">پرداخت نهایی</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block script %}{% endblock %}
+
+
+
