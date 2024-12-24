@@ -52,7 +52,7 @@ def category(request, name):
         messages.success(request, 'هیچ محصولی در این دسته‌بندی وجود ندارد.')
         return redirect('home')
 
-    return render(request, 'index.html', {'store': products, 'category': category})
+    return render(request, 'index.html', {'products': products, 'category': category})
 
 
 def category_summary(request, ):
