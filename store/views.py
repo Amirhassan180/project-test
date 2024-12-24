@@ -24,7 +24,7 @@ def search(request):
 
 def home(request):
     products = Product.objects.all()
-    return render(request, 'index.html', {'store': products})
+    return render(request, 'index.html', {'products': products})
 
 
 def product_details(request, id):
@@ -36,7 +36,7 @@ def product_details(request, id):
 
     return render(request, 'product-details.html',
                   {
-                      'store': products,
+                      'products': products,
                       'images': images,
                       'main_image': main_image,
                   })
@@ -68,4 +68,4 @@ def product_by_brand(request, product_brand):
         messages.success(request, 'هیچ محصولی با این نام وجود ندارد.')
         return redirect('home')
 
-    return render(request, 'index.html', {'store': products})
+    return render(request, 'index.html', {'products': products})
